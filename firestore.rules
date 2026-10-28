@@ -1,0 +1,59 @@
+rules_version = '2';
+
+// O cliente lê no browser, em tempo real, só o que é seu. Todas as escritas passam pelo servidor (Admin SDK),
+// por isso não há nenhuma regra de escrita. A equipa lê pelo servidor, onde as permissões por papel e módulo
+// (roles/{papel}, editáveis no painel) se verificam com can(); no browser só lê as próprias notificações.
+// Assim uma matriz editada vale logo, sem duplicar a lógica de permissões nestas regras.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+    function ownsOrder(orderId) {
+      return get(/databases/$(database)/documents/orders/$(orderId)).data.userId == request.auth.uid;
+    }
+
+    match /users/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+    }
+
+    match /orders/{orderId} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+
+      match /items/{itemId} {
+        allow read: if signedIn() && ownsOrder(orderId);
+      }
+      // Notas internas da equipa nunca chegam ao browser do cliente (a consulta tem de filtrar visibility)
+      match /events/{eventId} {
+        allow read: if signedIn() && resource.data.visibility == "cliente" && ownsOrder(orderId);
+      }
+    }
+
+    match /proofs/{proofId} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+
+      match /comments/{commentId} {
+        allow read: if signedIn()
+          && get(/databases/$(database)/documents/proofs/$(proofId)).data.userId == request.auth.uid;
+      }
+    }
+
+    match /threads/{threadId} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+
+      match /messages/{messageId} {
+        allow read: if signedIn()
+          && get(/databases/$(database)/documents/threads/$(threadId)).data.userId == request.auth.uid;
+      }
+    }
+
+    // Sino do painel e avisos da conta: cada pessoa lê só as suas notificações
+    match /notifications/{notificationId} {
+      allow read: if signedIn() && resource.data.recipientId == request.auth.uid;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,424 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─────────────────────────────────────────────────────────────
+   CORES — "Tinta & Papel" + cores do logótipo da Endju (vermelho e chama laranja/amarela da palanca)
+   + cores de processo CMYK como detalhe gráfico.
+   Contraste verificado (WCAG AA): texto sobre --paper/--card ≥ 4,5:1.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --paper: #f3f0e8; /* fundo: papel não revestido */
+  --paper-2: #e9e5da; /* superfícies rebaixadas */
+  --card: #fbfaf6; /* superfícies elevadas */
+  --ink: #121116; /* texto principal */
+  --ink-2: #4a4751; /* texto secundário */
+  --ink-3: #6f6b76; /* legendas, placeholders */
+  --line: rgb(18 17 22 / 0.12);
+
+  --brand: #d62c17; /* vermelho do logótipo (#e0301a), escurecido para texto branco a 5:1 */
+  --brand-strong: #b02210;
+  --brand-fg: #ffffff;
+  --flame: #f08000; /* laranja da chama no "endju" */
+  --flame-light: #f7b500; /* amarelo da chama */
+
+  --process-cyan: #00a3e0;
+  --process-magenta: #e6007e;
+  --process-yellow: #ffe500;
+
+  --success: #16703c;
+  --warning: #9a5b00;
+  --danger: #c0142d;
+  --info: #00648f;
+  --chart: #d62c17; /* barras dos gráficos do painel (validado: banda de luminosidade e contraste ≥ 3:1) */
+
+  --shadow-color: 18 17 22;
+}
+
+.dark {
+  --paper: #0f0e12;
+  --paper-2: #17161c;
+  --card: #1c1b22;
+  --ink: #f1eee6;
+  --ink-2: #b4b0ba;
+  --ink-3: #8d8994;
+  --line: rgb(241 238 230 / 0.12);
+
+  --brand: #ff5a3c;
+  --brand-strong: #ff8466;
+  --brand-fg: #14090f;
+
+  --success: #4cc27e;
+  --warning: #f0a43a;
+  --danger: #ff5a6e;
+  --info: #4cb8ea;
+  --chart: #f04a2c;
+
+  --shadow-color: 0 0 0;
+}
+
+/* Só existem as cores do design system: nada de bg-blue-500 perdidos. */
+@theme {
+  --color-*: initial;
+}
+
+@theme inline {
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-fg: var(--brand-fg);
+  --color-chart: var(--chart);
+  --color-flame: var(--flame);
+  --color-flame-light: var(--flame-light);
+  --color-process-cyan: var(--process-cyan);
+  --color-process-magenta: var(--process-magenta);
+  --color-process-yellow: var(--process-yellow);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+
+  /* Fontes: as variáveis --font-bricolage/instrument/plex-mono vêm do next/font em layout.tsx */
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --shadow-paper:
+    0 1px 0 rgb(var(--shadow-color) / 0.04), 0 1px 2px rgb(var(--shadow-color) / 0.06),
+    0 14px 30px -16px rgb(var(--shadow-color) / 0.24);
+  --shadow-lift: 0 2px 4px rgb(var(--shadow-color) / 0.05), 0 28px 60px -22px rgb(var(--shadow-color) / 0.4);
+}
+
+@theme {
+  /* TIPOGRAFIA — escala fluida de 320 px a 4K */
+  --text-display-2xl: clamp(3.25rem, 1.4rem + 8.2vw, 12rem);
+  --text-display-2xl--line-height: 0.88;
+  --text-display-2xl--letter-spacing: -0.045em;
+  --text-display-xl: clamp(2.75rem, 1.5rem + 5.4vw, 7.5rem);
+  --text-display-xl--line-height: 0.92;
+  --text-display-xl--letter-spacing: -0.04em;
+  --text-display-lg: clamp(2.25rem, 1.45rem + 3.4vw, 5rem);
+  --text-display-lg--line-height: 0.98;
+  --text-display-lg--letter-spacing: -0.035em;
+  --text-display-md: clamp(1.75rem, 1.3rem + 1.9vw, 3.25rem);
+  --text-display-md--line-height: 1.05;
+  --text-display-md--letter-spacing: -0.025em;
+  --text-display-sm: clamp(1.375rem, 1.15rem + 0.9vw, 2rem);
+  --text-display-sm--line-height: 1.15;
+  --text-display-sm--letter-spacing: -0.015em;
+  --text-eyebrow: 0.6875rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.14em;
+
+  /* ESPAÇAMENTO de página (o resto usa a escala de 4 px do Tailwind) */
+  --spacing-gutter: clamp(1rem, 0.4rem + 3vw, 3.5rem);
+  --spacing-section: clamp(5rem, 3rem + 8vw, 11rem);
+  --container-page: 112rem;
+
+  /* RAIOS — cantos de papel cortado; o arredondado fica para botões (pill) */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --radius-lg: 18px;
+
+  /* MOVIMENTO */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --animate-fade-in: fade-in 0.25s var(--ease-out-expo);
+  --animate-fade-out: fade-out 0.15s ease-in;
+  --animate-pop-in: pop-in 0.3s var(--ease-out-expo);
+  --animate-pop-out: pop-out 0.15s ease-in;
+  --animate-sheet-in: sheet-in 0.45s var(--ease-out-expo);
+  --animate-sheet-out: sheet-out 0.2s ease-in;
+  --animate-drawer-in: drawer-in 0.5s var(--ease-out-expo);
+  --animate-drawer-out: drawer-out 0.25s ease-in;
+  --animate-page-in: page-in 0.8s var(--ease-out-expo) both;
+  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      scale: 0.96;
+    }
+  }
+  @keyframes pop-out {
+    to {
+      opacity: 0;
+      scale: 0.97;
+    }
+  }
+  @keyframes sheet-in {
+    from {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes sheet-out {
+    to {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes drawer-in {
+    from {
+      transform: translateX(100%);
+    }
+  }
+  @keyframes drawer-out {
+    to {
+      transform: translateX(100%);
+    }
+  }
+  @keyframes page-in {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem);
+    }
+  }
+  @keyframes shimmer {
+    to {
+      transform: translateX(100%);
+    }
+  }
+}
+
+@utility container-page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--container-page);
+  padding-inline: var(--spacing-gutter);
+}
+
+/* Texto "eyebrow": rótulo técnico em mono, como as marcas de uma prova de impressão */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  letter-spacing: var(--text-eyebrow--letter-spacing);
+  text-transform: uppercase;
+}
+
+/* Funde as fotografias do hero no fundo: em cima e em baixo no telemóvel, também à esquerda (lado do texto) no desktop */
+@utility mask-plate {
+  mask-image:
+    linear-gradient(to right, transparent, #000 12%, #000 88%, transparent),
+    linear-gradient(to bottom, transparent, #000 8%, #000 72%, transparent);
+  mask-composite: intersect;
+}
+@utility mask-plate-side {
+  mask-image:
+    linear-gradient(to right, transparent, #000 28%),
+    linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+  mask-composite: intersect;
+}
+
+/* Texto corrido (blog e páginas legais): ritmo de leitura, títulos na fonte de display, listas e ligações */
+@utility prose-endju {
+  color: var(--ink-2);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  & > * + * {
+    margin-top: 1.25em;
+  }
+  & h2 {
+    margin-top: 2.25em;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: var(--text-display-sm);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+  & h3 {
+    margin-top: 1.75em;
+    color: var(--ink);
+    font-weight: 600;
+  }
+  & ul,
+  & ol {
+    padding-left: 1.25em;
+  }
+  & ul {
+    list-style: disc;
+  }
+  & ol {
+    list-style: decimal;
+  }
+  & li + li {
+    margin-top: 0.5em;
+  }
+  & li::marker {
+    color: var(--brand);
+  }
+  & strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  & a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--brand);
+    text-underline-offset: 4px;
+  }
+}
+
+/* Grão de papel subtil sobre o fundo */
+@utility paper-grain {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/*
+ * Revelação ao entrar no ecrã com scroll-driven animations nativas (sem JS).
+ * Sem suporte ou com movimento reduzido, o conteúdo fica simplesmente visível.
+ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+    .draw-x,
+    .draw-y {
+      animation: draw linear both;
+      animation-timeline: view();
+      animation-range: cover 15% cover 55%;
+    }
+    .draw-x {
+      transform-origin: left;
+      --draw-from: scaleX(0);
+    }
+    .draw-y {
+      transform-origin: top;
+      --draw-from: scaleY(0);
+    }
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+}
+
+@keyframes draw {
+  from {
+    transform: var(--draw-from);
+  }
+}
+
+/* Faixa de clientes em movimento contínuo (pára ao passar o rato) */
+.marquee {
+  animation: marquee 38s linear infinite;
+}
+.marquee:hover {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* 404: as chapas de cor entram em registo e voltam a sair (o desvio inicial vem das classes translate) */
+@keyframes registo {
+  40%,
+  60% {
+    translate: 0 0;
+  }
+}
+
+@layer base {
+  html {
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* 2K/4K: a interface cresce em vez de ficar minúscula no centro do ecrã */
+  @media (min-width: 2560px) {
+    html {
+      font-size: 125%;
+    }
+  }
+  @media (min-width: 3840px) {
+    html {
+      font-size: 150%;
+    }
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--brand);
+    color: var(--brand-fg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 3px;
+  }
+
+  /* Cursor personalizado ativo (só desktop com rato): o nativo esconde-se, menos nos campos de texto */
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none !important;
+  }
+  html.has-cursor :is(input:not([type="checkbox"], [type="radio"], [type="file"]), textarea, [contenteditable]) {
+    cursor: text !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

@@ -1,0 +1,12 @@
+rules_version = '2';
+
+// Tudo fechado: provas, imagens do site e comprovativos vão para o Cloudinary (os comprovativos como ficheiros
+// "authenticated", só com URL assinado pelo servidor). Abrir caminhos por cliente quando as artes passarem
+// para o Firebase Storage (plano Blaze).
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

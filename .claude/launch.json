@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "endju-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "env": { "NODE_OPTIONS": "--no-network-family-autoselection --dns-result-order=ipv4first" },
+      "port": 3000
+    },
+    {
+      "name": "endju-prod",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "start", "-p", "3001"],
+      "env": { "NODE_OPTIONS": "--no-network-family-autoselection --dns-result-order=ipv4first" },
+      "port": 3001
+    }
+  ]
+}
